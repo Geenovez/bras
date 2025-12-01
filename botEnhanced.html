@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Bot Enhanced</title>
+</head>
+<body>
+
+<h2>Teste do Bras Enhanced</h2>
+<p>Se o botão aparecer no canto da tela, está funcionando! 🎯</p>
+
+<script type='text/javascript'>
+	function initEmbeddedMessaging() {
+		try {
+			embeddedservice_bootstrap.settings.language = 'pt_BR'; // For example, enter 'en' or 'en-US'
+
+			embeddedservice_bootstrap.init(
+				'00D890000032JqX',
+				'Bras_CanaisDigitaisEnhanced',
+				'https://supergasbras--tecnica25.sandbox.my.site.com/ESWBrasCanaisDigitais1764590606132',
+				{
+					scrt2URL: 'https://supergasbras--tecnica25.sandbox.my.salesforce-scrt.com'
+				}
+			);
+		} catch (err) {
+			console.error('Error loading Embedded Messaging: ', err);
+		}
+	};
+</script>
+<script type='text/javascript' src='https://supergasbras--tecnica25.sandbox.my.site.com/ESWBrasCanaisDigitais1764590606132/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
+
+</body>
+</html>
