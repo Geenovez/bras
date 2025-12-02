@@ -2,100 +2,41 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8" />
-    <title>Bot Enhanced - Teste Account/Contact automáticos</title>
-
-    <style type="text/css">
-        body {
-            font-family: "Salesforce Sans", Arial, sans-serif;
-            margin: 20px;
-        }
-
-        h2 {
-            color: #EB640A;
-        }
-
-        .status {
-            margin-top: 12px;
-            font-size: 0.9rem;
-            color: #555;
-        }
-
-        /* Launcher igual ao Standard */
-        .embeddedServiceHelpButton .helpButton .uiButton {
-            background-color: #EB640A;
-            font-family: "Salesforce Sans", sans-serif;
-        }
-        .embeddedServiceHelpButton .helpButton .uiButton:focus {
-            outline: 1px solid #EB640A;
-        }
-
-        @font-face {
-            font-family: "Salesforce Sans";
-            src: url("https://c1.sfdcstatic.com/etc/clientlibs/sfdc-aem-master/clientlibs_base/fonts/SalesforceSans-Regular.woff") format("woff"),
-                 url("https://c1.sfdcstatic.com/etc/clientlibs/sfdc-aem-master/clientlibs_base/fonts/SalesforceSans-Regular.ttf") format("truetype");
-        }
-    </style>
+    <title>Atendimento Digital</title>
 </head>
 <body>
-    <h2>Teste do Bras Enhanced (AccountId / ContactId automáticos)</h2>
 
-    <p>
-        Esta página envia os valores fixos de <code>AccountId</code> e <code>ContactId</code>
-        para o Salesforce <strong>antes</strong> de abrir o chat.
-        <br>
-        Basta clicar no botão flutuante do chat no canto da página. 👇
-    </p>
-
-    <div class="status" id="statusMessage">
-        Carregando script do Salesforce...
-    </div>
-
-    <script type="text/javascript">
-        // Disparado quando o SDK do Embedded Messaging está pronto
-        window.addEventListener("onEmbeddedMessagingReady", () => {
-            document.getElementById("statusMessage").textContent =
-                "Embedded Messaging carregado. Clique no botão do chat.";
-
-            // Valores FIXOS para teste — ajuste conforme desejar
-            const hiddenFields = {
-                AccountId: "0018900000WyW8PAAV",
-                ContactId: "0038900000OCz1uAAD"
-            };
-
-            try {
-                embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields(hiddenFields);
-                console.log("%c Hidden Pre-Chat Fields enviados:", "color:green;font-weight:bold", hiddenFields);
-            } catch (e) {
-                console.error("Erro ao setar Hidden Pre-Chat Fields:", e);
-                document.getElementById("statusMessage").textContent =
-                    "Erro ao definir os valores. Veja o console.";
-            }
+<script>
+    // Define os parâmetros fixos assim que o script do Messaging estiver pronto
+    window.addEventListener("onEmbeddedMessagingReady", () => {
+        embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
+            AccountId: "0018900000WyW8PAAV",
+            ContactId: "0038900000OCz1uAAD"
         });
+    });
 
-        function initEmbeddedMessaging() {
-            try {
-                embeddedservice_bootstrap.settings.language = "pt_BR";
+    function initEmbeddedMessaging() {
+        try {
+            embeddedservice_bootstrap.settings.language = "pt_BR";
 
-                embeddedservice_bootstrap.init(
-                    "00D890000032JqX", // Org Id - Sandbox
-                    "Bras_CanaisDigitaisEnhanced", // DevName do Deployment
-                    "https://supergasbras--tecnica25.sandbox.my.site.com/ESWBrasCanaisDigitais1764590606132",
-                    {
-                        scrt2URL: "https://supergasbras--tecnica25.sandbox.my.salesforce-scrt.com"
-                    }
-                );
-            } catch (err) {
-                console.error("Erro ao carregar Embedded Messaging:", err);
-                document.getElementById("statusMessage").textContent =
-                    "Erro no boot do Messaging. Veja o console.";
-            }
+            embeddedservice_bootstrap.init(
+                "00D890000032JqX",  // OrgId
+                "Bras_CanaisDigitaisEnhanced", //Embedded Service deployment developer name
+                "https://supergasbras--tecnica25.sandbox.my.site.com/ESWBrasCanaisDigitais1764590606132",
+                {
+                    scrt2URL: "https://supergasbras--tecnica25.sandbox.my.salesforce-scrt.com"
+                }
+            );
+        } catch (err) {
+            console.error("Erro ao inicializar Embedded Messaging:", err);
         }
-    </script>
+    }
+</script>
 
-    <script
-        type="text/javascript"
-        src="https://supergasbras--tecnica25.sandbox.my.site.com/ESWBrasCanaisDigitais1764590606132/assets/js/bootstrap.min.js"
-        onload="initEmbeddedMessaging()">
-    </script>
+<script
+    src="https://supergasbras--tecnica25.sandbox.my.site.com/ESWBrasCanaisDigitais1764590606132/assets/js/bootstrap.min.js"
+    onload="initEmbeddedMessaging()">
+</script>
+
 </body>
 </html>
