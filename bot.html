@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8" />
-    <title>Bot Enhanced - Hidden Prechat Fixos</title>
+    <title>Bot Enhanced - Teste Account/Contact automáticos</title>
 
     <style type="text/css">
         body {
@@ -37,12 +37,13 @@
     </style>
 </head>
 <body>
-    <h2>Teste do Bras Enhanced (AccountId / ContactId fixos)</h2>
+    <h2>Teste do Bras Enhanced (AccountId / ContactId automáticos)</h2>
 
     <p>
-        Esta página seta automaticamente <code>AccountId</code> e <code>ContactId</code> como
-        <em>Hidden Pre-Chat Fields</em> assim que o Embedded Messaging estiver pronto.
-        Basta clicar no botão do chat no rodapé.
+        Esta página envia os valores fixos de <code>AccountId</code> e <code>ContactId</code>
+        para o Salesforce <strong>antes</strong> de abrir o chat.
+        <br>
+        Basta clicar no botão flutuante do chat no canto da página. 👇
     </p>
 
     <div class="status" id="statusMessage">
@@ -50,28 +51,24 @@
     </div>
 
     <script type="text/javascript">
+        // Disparado quando o SDK do Embedded Messaging está pronto
         window.addEventListener("onEmbeddedMessagingReady", () => {
             document.getElementById("statusMessage").textContent =
-                "Embedded Messaging carregado. Pode clicar no botão do chat.";
+                "Embedded Messaging carregado. Clique no botão do chat.";
 
+            // Valores FIXOS para teste — ajuste conforme desejar
             const hiddenFields = {
-                AccountId: {
-                    value: "0018900000WyW8PAAV",
-                    isEditableByEndUser: false
-                },
-                ContactId: {
-                    value: "0038900000OCz1uAAD",
-                    isEditableByEndUser: false
-                }
+                AccountId: "0018900000WyW8PAAV",
+                ContactId: "0038900000OCz1uAAD"
             };
 
             try {
                 embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields(hiddenFields);
-                console.log("Hidden pre-chat fields definidos:", hiddenFields);
+                console.log("%c Hidden Pre-Chat Fields enviados:", "color:green;font-weight:bold", hiddenFields);
             } catch (e) {
-                console.error("Erro ao definir hidden pre-chat fields:", e);
+                console.error("Erro ao setar Hidden Pre-Chat Fields:", e);
                 document.getElementById("statusMessage").textContent =
-                    "Erro ao definir hidden pre-chat fields. Veja o console.";
+                    "Erro ao definir os valores. Veja o console.";
             }
         });
 
@@ -80,17 +77,17 @@
                 embeddedservice_bootstrap.settings.language = "pt_BR";
 
                 embeddedservice_bootstrap.init(
-                    "00D890000032JqX", // Org Id (sandbox)
-                    "Bras_CanaisDigitaisEnhanced", // Dev name do deployment
+                    "00D890000032JqX", // Org Id - Sandbox
+                    "Bras_CanaisDigitaisEnhanced", // DevName do Deployment
                     "https://supergasbras--tecnica25.sandbox.my.site.com/ESWBrasCanaisDigitais1764590606132",
                     {
                         scrt2URL: "https://supergasbras--tecnica25.sandbox.my.salesforce-scrt.com"
                     }
                 );
             } catch (err) {
-                console.error("Error loading Embedded Messaging: ", err);
+                console.error("Erro ao carregar Embedded Messaging:", err);
                 document.getElementById("statusMessage").textContent =
-                    "Erro ao carregar Embedded Messaging. Veja o console.";
+                    "Erro no boot do Messaging. Veja o console.";
             }
         }
     </script>
