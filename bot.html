@@ -1,81 +1,184 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Bot Standard</title>
+    <meta charset="UTF-8" />
+    <title>Bot Enhanced - Teste Account/Contact</title>
+
+    <style type="text/css">
+        body {
+            font-family: "Salesforce Sans", Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            color: #EB640A;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        input[type="text"] {
+            width: 400px;
+            max-width: 100%;
+            padding: 6px 8px;
+            margin-top: 4px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button#startChatButton {
+            margin-top: 16px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #EB640A;
+            color: #FFFFFF;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button#startChatButton:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        /* ESTILO DO BOTÃO DO CHAT (LAUNCHER), IGUAL AO STANDARD */
+        .embeddedServiceHelpButton .helpButton .uiButton {
+            background-color: #EB640A;
+            font-family: "Salesforce Sans", sans-serif;
+        }
+        .embeddedServiceHelpButton .helpButton .uiButton:focus {
+            outline: 1px solid #EB640A;
+        }
+
+        @font-face {
+            font-family: "Salesforce Sans";
+            src: url("https://c1.sfdcstatic.com/etc/clientlibs/sfdc-aem-master/clientlibs_base/fonts/SalesforceSans-Regular.woff") format("woff"),
+                 url("https://c1.sfdcstatic.com/etc/clientlibs/sfdc-aem-master/clientlibs_base/fonts/SalesforceSans-Regular.ttf") format("truetype");
+        }
+    </style>
 </head>
 <body>
+    <h2>Teste do Bras Enhanced (AccountId / ContactId)</h2>
+    <p>
+        Preencha os dados abaixo e clique em
+        <strong>"Iniciar chat com esses dados"</strong>. Os valores serão enviados como
+        <em>Hidden Pre-Chat Fields</em> <code>AccountId</code> e <code>ContactId</code>.
+    </p>
 
-<h2>Teste do Bras Standard</h2>
-<p>Se o botão aparecer no canto da tela, está funcionando! 🎯</p>
+    <form id="prechatForm" onsubmit="event.preventDefault(); startChatWithPrechat();">
+        <label for="accountId">Account Id</label>
+        <input type="text" id="accountId" placeholder="001XXXXXXXXXXXX" />
 
-<style type='text/css'>
-	.embeddedServiceHelpButton .helpButton .uiButton {
-		background-color: #EB640A;
-		font-family: "Salesforce Sans", sans-serif;
-	}
-	.embeddedServiceHelpButton .helpButton .uiButton:focus {
-		outline: 1px solid #EB640A;
-	}
-	@font-face {
-		font-family: 'Salesforce Sans';
-		src: url('https://c1.sfdcstatic.com/etc/clientlibs/sfdc-aem-master/clientlibs_base/fonts/SalesforceSans-Regular.woff') format('woff'),
-		url('https://c1.sfdcstatic.com/etc/clientlibs/sfdc-aem-master/clientlibs_base/fonts/SalesforceSans-Regular.ttf') format('truetype');
-	}
-</style>
+        <label for="contactId">Contact Id</label>
+        <input type="text" id="contactId" placeholder="003XXXXXXXXXXXX" />
 
-<script type='text/javascript' src='https://service.force.com/embeddedservice/5.0/esw.min.js'></script>
-<script type='text/javascript'>
-	var initESW = function(gslbBaseURL) {
-		embedded_svc.settings.displayHelpButton = true; //Or false
-		embedded_svc.settings.language = ''; //For example, enter 'en' or 'en-US'
+        <button type="submit" id="startChatButton" disabled>
+            Iniciar chat com esses dados
+        </button>
+    </form>
 
-		//embedded_svc.settings.defaultMinimizedText = '...'; //(Defaults to Chat with an Expert)
-		//embedded_svc.settings.disabledMinimizedText = '...'; //(Defaults to Agent Offline)
+    <div class="status" id="statusMessage">
+        Carregando script do Salesforce...
+    </div>
 
-		//embedded_svc.settings.loadingText = ''; //(Defaults to Loading)
-		//embedded_svc.settings.storageDomain = 'yourdomain.com'; //(Sets the domain for your deployment so that visitors can navigate subdomains during a chat session)
+    <script type="text/javascript">
+        let messagingReady = false;
 
-		// Settings for Chat
-		//embedded_svc.settings.directToButtonRouting = function(prechatFormData) {
-			// Dynamically changes the button ID based on what the visitor enters in the pre-chat form.
-			// Returns a valid button ID.
-		//};
-		//embedded_svc.settings.prepopulatedPrechatFields = {}; //Sets the auto-population of pre-chat form fields
-		//embedded_svc.settings.fallbackRouting = []; //An array of button IDs, user IDs, or userId_buttonId
-		//embedded_svc.settings.offlineSupportMinimizedText = '...'; //(Defaults to Contact Us)
+        // Evento disparado quando o cliente de Messaging estiver pronto
+        window.addEventListener("onEmbeddedMessagingReady", () => {
+            messagingReady = true;
+            document.getElementById("statusMessage").textContent =
+                "Embedded Messaging carregado. Você já pode iniciar o chat.";
+            document.getElementById("startChatButton").disabled = false;
+        });
 
-		embedded_svc.settings.enabledFeatures = ['LiveAgent'];
-		embedded_svc.settings.entryFeature = 'LiveAgent';
+        function startChatWithPrechat() {
+            if (!messagingReady || !window.embeddedservice_bootstrap) {
+                alert("O cliente de messaging ainda não está pronto. Tente novamente em alguns segundos.");
+                return;
+            }
 
-		embedded_svc.init(
-			'https://supergasbras--tecnica25.sandbox.my.salesforce.com',
-			'https://supergasbras--tecnica25.sandbox.my.site.com/AssistenciaTecnica',
-			gslbBaseURL,
-			'00D890000032JqX',
-			'CanaisDigitais',
-			{
-				baseLiveAgentContentURL: 'https://c.la12s-core1.sfdc-xwy4ub.salesforceliveagent.com/content',
-				deploymentId: '5721Y000000NXVA',
-				buttonId: '5731Y000000NaVm',
-				baseLiveAgentURL: 'https://d.la12s-core1.sfdc-xwy4ub.salesforceliveagent.com/chat',
-				eswLiveAgentDevName: 'EmbeddedServiceLiveAgent_Parent04I1Y000000blMNUAY_17871376008',
-				isOfflineSupportEnabled: false
-			}
-		);
-	};
+            const accountId = document.getElementById("accountId").value.trim();
+            const contactId = document.getElementById("contactId").value.trim();
 
-	if (!window.embedded_svc) {
-		var s = document.createElement('script');
-		s.setAttribute('src', 'https://supergasbras--tecnica25.sandbox.my.salesforce.com/embeddedservice/5.0/esw.min.js');
-		s.onload = function() {
-			initESW(null);
-		};
-		document.body.appendChild(s);
-	} else {
-		initESW('https://service.force.com');
-	}
-</script>
+            const hiddenFields = {};
+
+            // Nomes EXATOS das variáveis que você criou no Messaging Channel:
+            // AccountId e ContactId
+            if (accountId) {
+                hiddenFields["AccountId"] = {
+                    value: accountId,
+                    isEditableByEndUser: false
+                };
+            }
+
+            if (contactId) {
+                hiddenFields["ContactId"] = {
+                    value: contactId,
+                    isEditableByEndUser: false
+                };
+            }
+
+            if (Object.keys(hiddenFields).length === 0) {
+                alert("Preencha pelo menos AccountId ou ContactId antes de iniciar o chat.");
+                return;
+            }
+
+            try {
+                embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields(hiddenFields);
+                console.log("Hidden pre-chat fields enviados:", hiddenFields);
+            } catch (e) {
+                console.error("Erro ao enviar hidden pre-chat fields:", e);
+                alert("Erro ao enviar dados de pre-chat. Veja o console do navegador.");
+                return;
+            }
+
+            embeddedservice_bootstrap.utilAPI
+                .launchChat()
+                .then(() => {
+                    console.log("Chat lançado com sucesso.");
+                })
+                .catch((err) => {
+                    console.error("Erro ao lançar o chat:", err);
+                    alert("Falha ao iniciar o chat. Veja o console do navegador.");
+                });
+        }
+
+        // Snippet padrão do Enhanced
+        function initEmbeddedMessaging() {
+            try {
+                embeddedservice_bootstrap.settings.language = "pt_BR";
+
+                embeddedservice_bootstrap.init(
+                    "00D890000032JqX", // Org Id (sandbox)
+                    "Bras_CanaisDigitaisEnhanced", // Dev name do deployment
+                    "https://supergasbras--tecnica25.sandbox.my.site.com/ESWBrasCanaisDigitais1764590606132",
+                    {
+                        scrt2URL: "https://supergasbras--tecnica25.sandbox.my.salesforce-scrt.com"
+                    }
+                );
+            } catch (err) {
+                console.error("Error loading Embedded Messaging: ", err);
+                document.getElementById("statusMessage").textContent =
+                    "Erro ao carregar Embedded Messaging. Veja o console do navegador.";
+            }
+        }
+    </script>
+
+    <script
+        type="text/javascript"
+        src="https://supergasbras--tecnica25.sandbox.my.site.com/ESWBrasCanaisDigitais1764590606132/assets/js/bootstrap.min.js"
+        onload="initEmbeddedMessaging()">
+    </script>
 </body>
 </html>
-
