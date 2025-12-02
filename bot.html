@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8" />
-    <title>Bot Enhanced - Teste Account/Contact</title>
+    <title>Bot Enhanced - Hidden Prechat Fixos</title>
 
     <style type="text/css">
         body {
@@ -14,43 +14,13 @@
             color: #EB640A;
         }
 
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: 600;
-        }
-
-        input[type="text"] {
-            width: 400px;
-            max-width: 100%;
-            padding: 6px 8px;
-            margin-top: 4px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button#startChatButton {
-            margin-top: 16px;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            background-color: #EB640A;
-            color: #FFFFFF;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        button#startChatButton:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
         .status {
             margin-top: 12px;
             font-size: 0.9rem;
             color: #555;
         }
 
+        /* Launcher igual ao Standard */
         .embeddedServiceHelpButton .helpButton .uiButton {
             background-color: #EB640A;
             font-family: "Salesforce Sans", sans-serif;
@@ -67,91 +37,43 @@
     </style>
 </head>
 <body>
-    <h2>Teste do Bras Enhanced (AccountId / ContactId)</h2>
+    <h2>Teste do Bras Enhanced (AccountId / ContactId fixos)</h2>
 
-    <form id="prechatForm" onsubmit="event.preventDefault(); startChatWithPrechat();">
-        <label for="accountId">Account Id</label>
-        <input type="text" id="accountId" placeholder="001XXXXXXXXXXXX" value="0018900000WyW8PAAV" />
-
-        <label for="contactId">Contact Id</label>
-        <input type="text" id="contactId" placeholder="003XXXXXXXXXXXX" value="0038900000OCz1uAAD" />
-
-        <button type="submit" id="startChatButton" disabled>
-            Iniciar chat com esses dados
-        </button>
-    </form>
+    <p>
+        Esta página seta automaticamente <code>AccountId</code> e <code>ContactId</code> como
+        <em>Hidden Pre-Chat Fields</em> assim que o Embedded Messaging estiver pronto.
+        Basta clicar no botão do chat no rodapé.
+    </p>
 
     <div class="status" id="statusMessage">
         Carregando script do Salesforce...
     </div>
 
     <script type="text/javascript">
-        let messagingReady = false;
-
-        // Evento disparado pelo bootstrap do Embedded Messaging
         window.addEventListener("onEmbeddedMessagingReady", () => {
-            messagingReady = true;
             document.getElementById("statusMessage").textContent =
-                "Embedded Messaging carregado. Você já pode iniciar o chat.";
+                "Embedded Messaging carregado. Pode clicar no botão do chat.";
 
-            const btn = document.getElementById("startChatButton");
-            if (btn) {
-                btn.disabled = false;
-            }
-        });
-
-        function startChatWithPrechat() {
-            if (!messagingReady || !window.embeddedservice_bootstrap) {
-                alert("O cliente de messaging ainda não está pronto. Tente novamente em alguns segundos.");
-                return;
-            }
-
-            // Lê dos inputs (ou usa valores fixos, se quiser)
-            let accountId = document.getElementById("accountId").value.trim();
-            let contactId = document.getElementById("contactId").value.trim();
-
-            const hiddenFields = {};
-
-            // Nomes EXATOS das variáveis criadas no Messaging Channel:
-            // AccountId e ContactId
-            if (accountId) {
-                hiddenFields["AccountId"] = {
-                    value: accountId,
+            const hiddenFields = {
+                AccountId: {
+                    value: "0018900000WyW8PAAV",
                     isEditableByEndUser: false
-                };
-            }
-
-            if (contactId) {
-                hiddenFields["ContactId"] = {
-                    value: contactId,
+                },
+                ContactId: {
+                    value: "0038900000OCz1uAAD",
                     isEditableByEndUser: false
-                };
-            }
-
-            if (Object.keys(hiddenFields).length === 0) {
-                alert("Preencha pelo menos AccountId ou ContactId antes de iniciar o chat.");
-                return;
-            }
+                }
+            };
 
             try {
                 embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields(hiddenFields);
-                console.log("Hidden pre-chat fields enviados:", hiddenFields);
+                console.log("Hidden pre-chat fields definidos:", hiddenFields);
             } catch (e) {
-                console.error("Erro ao enviar hidden pre-chat fields:", e);
-                alert("Erro ao enviar dados de pre-chat. Veja o console do navegador.");
-                return;
+                console.error("Erro ao definir hidden pre-chat fields:", e);
+                document.getElementById("statusMessage").textContent =
+                    "Erro ao definir hidden pre-chat fields. Veja o console.";
             }
-
-            embeddedservice_bootstrap.utilAPI
-                .launchChat()
-                .then(() => {
-                    console.log("Chat lançado com sucesso.");
-                })
-                .catch((err) => {
-                    console.error("Erro ao lançar o chat:", err);
-                    alert("Falha ao iniciar o chat. Veja o console do navegador.");
-                });
-        }
+        });
 
         function initEmbeddedMessaging() {
             try {
@@ -168,7 +90,7 @@
             } catch (err) {
                 console.error("Error loading Embedded Messaging: ", err);
                 document.getElementById("statusMessage").textContent =
-                    "Erro ao carregar Embedded Messaging. Veja o console do navegador.";
+                    "Erro ao carregar Embedded Messaging. Veja o console.";
             }
         }
     </script>
