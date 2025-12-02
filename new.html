@@ -51,7 +51,6 @@
             color: #555;
         }
 
-        /* ESTILO DO BOTÃO DO CHAT (LAUNCHER), IGUAL AO STANDARD */
         .embeddedServiceHelpButton .helpButton .uiButton {
             background-color: #EB640A;
             font-family: "Salesforce Sans", sans-serif;
@@ -75,18 +74,6 @@
         <em>Hidden Pre-Chat Fields</em> <code>AccountId</code> e <code>ContactId</code>.
     </p>
 
-    <form id="prechatForm" onsubmit="event.preventDefault(); startChatWithPrechat();">
-        <label for="accountId">Account Id</label>
-        <input type="text" id="accountId" placeholder="001XXXXXXXXXXXX" />
-
-        <label for="contactId">Contact Id</label>
-        <input type="text" id="contactId" placeholder="003XXXXXXXXXXXX" />
-
-        <button type="submit" id="startChatButton" disabled>
-            Iniciar chat com esses dados
-        </button>
-    </form>
-
     <div class="status" id="statusMessage">
         Carregando script do Salesforce...
     </div>
@@ -94,7 +81,6 @@
     <script type="text/javascript">
         let messagingReady = false;
 
-        // Evento disparado quando o cliente de Messaging estiver pronto
         window.addEventListener("onEmbeddedMessagingReady", () => {
             messagingReady = true;
             document.getElementById("statusMessage").textContent =
@@ -113,8 +99,7 @@
 
             const hiddenFields = {};
 
-            // Nomes EXATOS das variáveis que você criou no Messaging Channel:
-            // AccountId e ContactId
+            accountId = "0018900000WyW8PAAV";
             if (accountId) {
                 hiddenFields["AccountId"] = {
                     value: accountId,
@@ -122,6 +107,7 @@
                 };
             }
 
+            contactId = "0038900000OCz1uAAD";
             if (contactId) {
                 hiddenFields["ContactId"] = {
                     value: contactId,
@@ -154,7 +140,6 @@
                 });
         }
 
-        // Snippet padrão do Enhanced
         function initEmbeddedMessaging() {
             try {
                 embeddedservice_bootstrap.settings.language = "pt_BR";
