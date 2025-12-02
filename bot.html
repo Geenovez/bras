@@ -69,6 +69,18 @@
 <body>
     <h2>Teste do Bras Enhanced (AccountId / ContactId)</h2>
 
+    <form id="prechatForm" onsubmit="event.preventDefault(); startChatWithPrechat();">
+        <label for="accountId">Account Id</label>
+        <input type="text" id="accountId" placeholder="001XXXXXXXXXXXX" value="0018900000WyW8PAAV" />
+
+        <label for="contactId">Contact Id</label>
+        <input type="text" id="contactId" placeholder="003XXXXXXXXXXXX" value="0038900000OCz1uAAD" />
+
+        <button type="submit" id="startChatButton" disabled>
+            Iniciar chat com esses dados
+        </button>
+    </form>
+
     <div class="status" id="statusMessage">
         Carregando script do Salesforce...
     </div>
@@ -76,11 +88,16 @@
     <script type="text/javascript">
         let messagingReady = false;
 
+        // Evento disparado pelo bootstrap do Embedded Messaging
         window.addEventListener("onEmbeddedMessagingReady", () => {
             messagingReady = true;
             document.getElementById("statusMessage").textContent =
                 "Embedded Messaging carregado. Você já pode iniciar o chat.";
-            document.getElementById("startChatButton").disabled = false;
+
+            const btn = document.getElementById("startChatButton");
+            if (btn) {
+                btn.disabled = false;
+            }
         });
 
         function startChatWithPrechat() {
@@ -89,12 +106,14 @@
                 return;
             }
 
-            const accountId = document.getElementById("accountId").value.trim();
-            const contactId = document.getElementById("contactId").value.trim();
+            // Lê dos inputs (ou usa valores fixos, se quiser)
+            let accountId = document.getElementById("accountId").value.trim();
+            let contactId = document.getElementById("contactId").value.trim();
 
             const hiddenFields = {};
 
-            accountId = "0018900000WyW8PAAV";
+            // Nomes EXATOS das variáveis criadas no Messaging Channel:
+            // AccountId e ContactId
             if (accountId) {
                 hiddenFields["AccountId"] = {
                     value: accountId,
@@ -102,7 +121,6 @@
                 };
             }
 
-            contactId = "0038900000OCz1uAAD";
             if (contactId) {
                 hiddenFields["ContactId"] = {
                     value: contactId,
@@ -162,4 +180,3 @@
     </script>
 </body>
 </html>
-
