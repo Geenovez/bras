@@ -6,8 +6,10 @@
 </head>
 <body>
 
+    <h2>Teste do Bras Enhanced</h2>
+    <p>Se o botão aparecer no canto da tela, está funcionando! 🎯</p>
+    
 <script>
-    // Define os parâmetros fixos assim que o script do Messaging estiver pronto
     window.addEventListener("onEmbeddedMessagingReady", () => {
         embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
             AccountId: "0018900000WyW8PAAV",
@@ -16,20 +18,15 @@
     });
 
     function initEmbeddedMessaging() {
-        try {
-            embeddedservice_bootstrap.settings.language = "pt_BR";
-
-            embeddedservice_bootstrap.init(
-                "00D890000032JqX",  // OrgId
-                "Bras_CanaisDigitaisEnhanced", //Embedded Service deployment developer name
-                "https://supergasbras--tecnica25.sandbox.my.site.com/ESWBrasCanaisDigitais1764590606132",
-                {
-                    scrt2URL: "https://supergasbras--tecnica25.sandbox.my.salesforce-scrt.com"
-                }
-            );
-        } catch (err) {
-            console.error("Erro ao inicializar Embedded Messaging:", err);
-        }
+        embeddedservice_bootstrap.settings.language = "pt_BR";
+        embeddedservice_bootstrap.init(
+            "00D890000032JqX",  // OrgId
+            "Bras_CanaisDigitaisEnhanced", //Embedded Service deployment developer name
+            "https://supergasbras--tecnica25.sandbox.my.site.com/ESWBrasCanaisDigitais1764590606132",
+            {
+                scrt2URL: "https://supergasbras--tecnica25.sandbox.my.salesforce-scrt.com"
+            }
+        );
     }
 </script>
 
@@ -40,3 +37,4 @@
 
 </body>
 </html>
+
